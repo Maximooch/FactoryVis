@@ -17,8 +17,9 @@ export class FactoryFloor {
         const floorGeometry = new THREE.PlaneGeometry(150, 150);
         const floorMaterial = new THREE.MeshStandardMaterial({
             color: 0x2a2a2a, // Dark gray concrete
-            roughness: 0.8,
-            metalness: 0.2
+            roughness: 0.9, // More matte for concrete
+            metalness: 0.1, // Slight metallic sheen
+            envMapIntensity: 0.3
         });
         
         this.floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -31,7 +32,7 @@ export class FactoryFloor {
 
     createGridHelper() {
         // Grid for spatial reference (150 units, 30 divisions = 5 unit spacing)
-        const gridHelper = new THREE.GridHelper(150, 30, 0x444444, 0x333333);
+        const gridHelper = new THREE.GridHelper(150, 30, 0x555555, 0x333333);
         gridHelper.position.y = 0.01; // Slightly above floor to prevent z-fighting
         this.group.add(gridHelper);
     }
@@ -73,12 +74,13 @@ export class ConveyorBelt {
     }
 
     createBelt() {
-        // Main belt surface (dark gray/black)
+        // Main belt surface (polished dark material)
         const beltGeometry = new THREE.BoxGeometry(this.width, this.height, this.length);
         const beltMaterial = new THREE.MeshStandardMaterial({
             color: 0x1a1a1a, // Very dark gray (almost black)
-            roughness: 0.6,
-            metalness: 0.4
+            roughness: 0.4, // Polished surface
+            metalness: 0.6, // More metallic for futuristic feel
+            envMapIntensity: 0.5
         });
         
         this.belt = new THREE.Mesh(beltGeometry, beltMaterial);
@@ -95,9 +97,10 @@ export class ConveyorBelt {
     createEdgeGuides() {
         const guideGeometry = new THREE.BoxGeometry(0.3, 1, this.length);
         const guideMaterial = new THREE.MeshStandardMaterial({
-            color: 0x666666,
-            roughness: 0.7,
-            metalness: 0.3
+            color: 0x888888, // Lighter gray for contrast
+            roughness: 0.5,
+            metalness: 0.7, // Shiny metal rails
+            envMapIntensity: 0.6
         });
         
         // Left guide
@@ -117,14 +120,15 @@ export class ConveyorBelt {
         this.stationMarkers = [];
         
         this.stations.forEach((station) => {
-            // Station marker (colored box beside conveyor)
+            // Station marker (glowing colored box beside conveyor)
             const markerGeometry = new THREE.BoxGeometry(2, 2, 2);
             const markerMaterial = new THREE.MeshStandardMaterial({
                 color: station.color,
                 emissive: station.color,
-                emissiveIntensity: 0.3,
-                roughness: 0.5,
-                metalness: 0.3
+                emissiveIntensity: 0.5, // Stronger glow
+                roughness: 0.3, // Polished
+                metalness: 0.4,
+                envMapIntensity: 0.5
             });
             
             const marker = new THREE.Mesh(markerGeometry, markerMaterial);

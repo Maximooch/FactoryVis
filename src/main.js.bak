@@ -1,10 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { FactoryFloor, ConveyorBelt, ProductionLine } from './factory.js';
+import { Dashboard } from './ui.js';
 
 // Scene setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1a2e);
+
+// Add atmospheric fog (warm amber for futuristic feel)
+scene.fog = new THREE.Fog(0x1a1a2e, 50, 150);
 
 // Camera setup
 const camera = new THREE.PerspectiveCamera(
@@ -22,23 +26,57 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// Enhanced tone mapping for better color
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
 
 // Add canvas to DOM
 const container = document.getElementById('canvas-container');
 container.appendChild(renderer.domElement);
 
-// Lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+// ENHANCED LIGHTING SETUP
+
+// Ambient light (slightly warmer)
+const ambientLight = new THREE.AmbientLight(0xffd9aa, 0.3);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-directionalLight.position.set(50, 50, 25);
+// Main directional light (soft, elevated)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+directionalLight.position.set(50, 60, 30);
 directionalLight.castShadow = true;
-directionalLight.shadow.camera.left = -50;
-directionalLight.shadow.camera.right = 50;
-directionalLight.shadow.camera.top = 50;
-directionalLight.shadow.camera.bottom = -50;
+directionalLight.shadow.mapSize.width = 2048;
+directionalLight.shadow.mapSize.height = 2048;
+directionalLight.shadow.camera.left = -60;
+directionalLight.shadow.camera.right = 60;
+directionalLight.shadow.camera.top = 60;
+directionalLight.shadow.camera.bottom = -60;
+directionalLight.shadow.camera.near = 0.5;
+directionalLight.shadow.camera.far = 200;
+directionalLight.shadow.bias = -0.0001;
 scene.add(directionalLight);
+
+// Rim light (back lighting for depth)
+const rimLight = new THREE.DirectionalLight(0x88ccff, 0.4);
+rimLight.position.set(-30, 20, -50);
+scene.add(rimLight);
+
+// Fill light (soft front fill to reduce harsh shadows)
+const fillLight = new THREE.DirectionalLight(0xffaa77, 0.2);
+fillLight.position.set(0, 10, 50);
+scene.add(fillLight);
+
+// Accent lights at stations (subtle colored glow)
+const station1Light = new THREE.PointLight(0xff4444, 0.5, 15);
+station1Light.position.set(-10, 3, -20);
+scene.add(station1Light);
+
+const station2Light = new THREE.PointLight(0xffaa44, 0.5, 15);
+station2Light.position.set(-10, 3, -50);
+scene.add(station2Light);
+
+const station3Light = new THREE.PointLight(0x44ff44, 0.5, 15);
+station3Light.position.set(-10, 3, -80);
+scene.add(station3Light);
 
 // Factory Floor
 const factoryFloor = new FactoryFloor();
@@ -73,6 +111,9 @@ controls.dampingFactor = 0.05;
 controls.minDistance = 10;
 controls.maxDistance = 100;
 controls.maxPolarAngle = Math.PI / 2; // Prevent camera going below ground
+
+// UI Dashboard
+const dashboard = new Dashboard(productionLine, camera, controls);
 
 // WASD Camera Movement
 const moveSpeed = 20; // Units per second
@@ -156,8 +197,6 @@ window.addEventListener('resize', () => {
 
 // Animation loop
 const clock = new THREE.Clock();
-let statsTimer = 0;
-const statsInterval = 5; // Log stats every 5 seconds
 
 function animate() {
     requestAnimationFrame(animate);
@@ -167,19 +206,8 @@ function animate() {
     // Update production line (handles all houses)
     productionLine.update(deltaTime);
     
-    // Log stats periodically
-    statsTimer += deltaTime;
-    if (statsTimer >= statsInterval) {
-        statsTimer = 0;
-        const stats = productionLine.getStats();
-        console.log('=== Production Stats ===');
-        console.log(`Completed: ${stats.housesCompleted}`);
-        console.log(`In Progress: ${stats.housesInProgress}`);
-        console.log(`Rate: ${stats.housesPerHour}/hour (${stats.housesPerDay}/day)`);
-        console.log(`Elapsed: ${stats.elapsedTime}`);
-        console.log(`Speed: ${stats.productionSpeed}x`);
-        console.log('=======================');
-    }
+    // Update dashboard stats
+    dashboard.update();
     
     // Update camera movement
     updateCameraMovement(deltaTime);
@@ -201,3 +229,5 @@ console.log('Production line active ✓');
 console.log('Movement system active ✓');
 console.log('WASD controls enabled ✓');
 console.log('Stats tracking enabled ✓');
+console.log('UI Dashboard active ✓');
+console.log('Visual polish applied ✓');

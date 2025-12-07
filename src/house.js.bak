@@ -16,6 +16,10 @@ export class HouseShell {
         // Assembly stage (0 = frame only, 1 = +walls, 2 = +roof)
         this.currentStage = 0;
         
+        // Movement properties
+        this.speed = 5; // Units per second
+        this.isPaused = false;
+        
         // Create all components (initially hidden except frame)
         this.createFrame();
         this.createWalls();
@@ -108,10 +112,31 @@ export class HouseShell {
     }
 
     /**
-     * Update method for animation (to be used later)
+     * Update method for movement along conveyor
      */
     update(deltaTime) {
-        // Placeholder for future movement/animation
+        if (!this.isPaused) {
+            // Move along negative Z-axis (down the conveyor)
+            this.group.position.z -= this.speed * deltaTime;
+        }
+    }
+
+    /**
+     * Pause/resume movement
+     */
+    pause() {
+        this.isPaused = true;
+    }
+
+    resume() {
+        this.isPaused = false;
+    }
+
+    /**
+     * Get current Z position
+     */
+    getPosition() {
+        return this.group.position.z;
     }
 }
 

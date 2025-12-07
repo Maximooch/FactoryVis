@@ -37,7 +37,7 @@ export class HouseShell {
             this.depth
         );
         const frameMaterial = new THREE.MeshBasicMaterial({
-            color: 0x888888,
+            color: 0xaaaaaa, // Lighter gray for better visibility
             wireframe: true,
             wireframeLinewidth: 2
         });
@@ -48,16 +48,17 @@ export class HouseShell {
     }
 
     createWalls() {
-        // Solid walls (beige/tan color)
+        // Solid walls (warm beige/tan with enhanced materials)
         const wallsGeometry = new THREE.BoxGeometry(
             this.width - 0.2, // Slightly smaller than frame
             this.height - 0.2,
             this.depth - 0.2
         );
         const wallsMaterial = new THREE.MeshStandardMaterial({
-            color: 0xd4a574, // Beige/tan
-            roughness: 0.7,
-            metalness: 0.1
+            color: 0xe8c4a0, // Warmer beige/tan
+            roughness: 0.6, // Slightly polished
+            metalness: 0.1,
+            envMapIntensity: 0.3
         });
         
         this.walls = new THREE.Mesh(wallsGeometry, wallsMaterial);
@@ -68,16 +69,17 @@ export class HouseShell {
     }
 
     createRoof() {
-        // Flat roof cap (dark gray/brown)
+        // Flat roof cap (polished dark material)
         const roofGeometry = new THREE.BoxGeometry(
             this.width + 1, // Slightly wider overhang
             0.5, // Thin roof
             this.depth + 1
         );
         const roofMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4a4a4a, // Dark gray
-            roughness: 0.8,
-            metalness: 0.2
+            color: 0x3a3a3a, // Lighter dark gray for contrast
+            roughness: 0.4, // Polished finish
+            metalness: 0.5, // Metallic roof
+            envMapIntensity: 0.6
         });
         
         this.roof = new THREE.Mesh(roofGeometry, roofMaterial);
