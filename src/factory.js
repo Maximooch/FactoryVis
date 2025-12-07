@@ -48,4 +48,120 @@ export class FactoryFloor {
     }
 }
 
+/**
+ * ConveyorBelt - Manufacturing line with assembly stations
+ */
+export class ConveyorBelt {
+    constructor() {
+        this.group = new THREE.Group();
+        
+        // Conveyor dimensions
+        this.width = 15;
+        this.length = 100;
+        this.height = 0.5;
+        
+        // Station positions along Z-axis
+        this.stations = [
+            { z: -20, stage: 1, name: 'Frame Assembly', color: 0xff4444 },  // Red
+            { z: -50, stage: 2, name: 'Walls Assembly', color: 0xffaa44 },  // Yellow/Orange
+            { z: -80, stage: 3, name: 'Roof Assembly', color: 0x44ff44 }    // Green
+        ];
+        
+        this.createBelt();
+        this.createStations();
+    }
+
+    createBelt() {
+        // Main belt surface (dark gray/black)
+        const beltGeometry = new THREE.BoxGeometry(this.width, this.height, this.length);
+        const beltMaterial = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a, // Very dark gray (almost black)
+            roughness: 0.6,
+            metalness: 0.4
+        });
+        
+        this.belt = new THREE.Mesh(beltGeometry, beltMaterial);
+        this.belt.position.set(0, this.height / 2, -this.length / 2); // Position so it starts at Z=0
+        this.belt.receiveShadow = true;
+        this.belt.castShadow = true;
+        
+        this.group.add(this.belt);
+        
+        // Add edge guides (optional side rails)
+        this.createEdgeGuides();
+    }
+
+    createEdgeGuides() {
+        const guideGeometry = new THREE.BoxGeometry(0.3, 1, this.length);
+        const guideMaterial = new THREE.MeshStandardMaterial({
+            color: 0x666666,
+            roughness: 0.7,
+            metalness: 0.3
+        });
+        
+        // Left guide
+        const leftGuide = new THREE.Mesh(guideGeometry, guideMaterial);
+        leftGuide.position.set(-this.width / 2 - 0.15, 0.5, -this.length / 2);
+        leftGuide.castShadow = true;
+        this.group.add(leftGuide);
+        
+        // Right guide
+        const rightGuide = new THREE.Mesh(guideGeometry, guideMaterial);
+        rightGuide.position.set(this.width / 2 + 0.15, 0.5, -this.length / 2);
+        rightGuide.castShadow = true;
+        this.group.add(rightGuide);
+    }
+
+    createStations() {
+        this.stationMarkers = [];
+        
+        this.stations.forEach((station) => {
+            // Station marker (colored box beside conveyor)
+            const markerGeometry = new THREE.BoxGeometry(2, 2, 2);
+            const markerMaterial = new THREE.MeshStandardMaterial({
+                color: station.color,
+                emissive: station.color,
+                emissiveIntensity: 0.3,
+                roughness: 0.5,
+                metalness: 0.3
+            });
+            
+            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+            marker.position.set(
+                -this.width / 2 - 3, // Left side of conveyor
+                1, // Sitting on floor
+                station.z
+            );
+            marker.castShadow = true;
+            marker.userData = station; // Store station info
+            
+            this.group.add(marker);
+            this.stationMarkers.push(marker);
+        });
+    }
+
+    /**
+     * Check if a house is at a station position
+     * Returns station data or null
+     */
+    getStationAtPosition(zPosition) {
+        const tolerance = 1.0; // Within 1 unit of station
+        
+        for (const station of this.stations) {
+            if (Math.abs(zPosition - station.z) < tolerance) {
+                return station;
+            }
+        }
+        return null;
+    }
+
+    getGroup() {
+        return this.group;
+    }
+
+    getStations() {
+        return this.stations;
+    }
+}
+
 console.log('factory.js loaded ✓');

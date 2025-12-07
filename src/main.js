@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { FactoryFloor } from './factory.js';
+import { FactoryFloor, ConveyorBelt } from './factory.js';
 import { HouseShell } from './house.js';
 
 // Scene setup
@@ -15,7 +15,7 @@ const camera = new THREE.PerspectiveCamera(
     1000 // Far clipping plane
 );
 camera.position.set(30, 20, 30);
-camera.lookAt(0, 0, 0);
+camera.lookAt(0, 0, -30); // Look toward middle of conveyor
 
 // Renderer setup
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -45,9 +45,13 @@ scene.add(directionalLight);
 const factoryFloor = new FactoryFloor();
 scene.add(factoryFloor.getGroup());
 
-// House Shell (replacing test cube)
+// Conveyor Belt
+const conveyor = new ConveyorBelt();
+scene.add(conveyor.getGroup());
+
+// House Shell (starts at beginning of conveyor)
 const house = new HouseShell();
-house.getGroup().position.set(0, 0, 0); // Center of factory floor
+house.getGroup().position.set(0, 0, 0); // Start at Z=0
 scene.add(house.getGroup());
 
 // Test cube (keeping as size reference for now)
@@ -58,7 +62,7 @@ const testMaterial = new THREE.MeshStandardMaterial({
     roughness: 0.6
 });
 const testCube = new THREE.Mesh(testGeometry, testMaterial);
-testCube.position.set(15, 2.5, 0); // Move to side so it doesn't overlap house
+testCube.position.set(15, 2.5, -30); // Move to side
 testCube.castShadow = true;
 testCube.receiveShadow = true;
 scene.add(testCube);
@@ -79,21 +83,33 @@ window.addEventListener('resize', () => {
 });
 
 // Animation loop
-let stageTestTimer = 0;
+const clock = new THREE.Clock();
+
 function animate() {
     requestAnimationFrame(animate);
+    
+    const deltaTime = clock.getDelta();
     
     // Rotate test cube
     testCube.rotation.x += 0.01;
     testCube.rotation.y += 0.01;
     
-    // Demo: Cycle through house assembly stages every 2 seconds
-    stageTestTimer += 0.016; // ~60fps
-    if (stageTestTimer > 2) {
-        stageTestTimer = 0;
-        const nextStage = (house.currentStage + 1) % 3;
-        house.setStage(nextStage);
-        console.log(`House stage: ${nextStage}`);
+    // Update house movement
+    house.update(deltaTime);
+    
+    // Check if house is at a station
+    const currentStation = conveyor.getStationAtPosition(house.getPosition());
+    if (currentStation && house.currentStage < currentStation.stage) {
+        // House reached a new station - assemble next stage
+        house.setStage(currentStation.stage);
+        console.log(`Station ${currentStation.stage}: ${currentStation.name} - Stage ${currentStation.stage} complete`);
+    }
+    
+    // Reset house if it goes past the end
+    if (house.getPosition() < -100) {
+        house.getGroup().position.z = 0;
+        house.setStage(0);
+        console.log('House completed! Resetting to start...');
     }
     
     // Update controls
@@ -108,4 +124,6 @@ animate();
 
 console.log('FactoryVis scene initialized ✓');
 console.log('Factory floor added ✓');
+console.log('Conveyor belt added ✓');
 console.log('House shell added ✓');
+console.log('Movement system active ✓');

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { FactoryFloor } from './factory.js';
+import { HouseShell } from './house.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -44,7 +45,12 @@ scene.add(directionalLight);
 const factoryFloor = new FactoryFloor();
 scene.add(factoryFloor.getGroup());
 
-// Test cube to verify rendering (keeping as size reference)
+// House Shell (replacing test cube)
+const house = new HouseShell();
+house.getGroup().position.set(0, 0, 0); // Center of factory floor
+scene.add(house.getGroup());
+
+// Test cube (keeping as size reference for now)
 const testGeometry = new THREE.BoxGeometry(5, 5, 5);
 const testMaterial = new THREE.MeshStandardMaterial({ 
     color: 0x00ff88,
@@ -52,7 +58,7 @@ const testMaterial = new THREE.MeshStandardMaterial({
     roughness: 0.6
 });
 const testCube = new THREE.Mesh(testGeometry, testMaterial);
-testCube.position.set(0, 2.5, 0);
+testCube.position.set(15, 2.5, 0); // Move to side so it doesn't overlap house
 testCube.castShadow = true;
 testCube.receiveShadow = true;
 scene.add(testCube);
@@ -73,12 +79,22 @@ window.addEventListener('resize', () => {
 });
 
 // Animation loop
+let stageTestTimer = 0;
 function animate() {
     requestAnimationFrame(animate);
     
     // Rotate test cube
     testCube.rotation.x += 0.01;
     testCube.rotation.y += 0.01;
+    
+    // Demo: Cycle through house assembly stages every 2 seconds
+    stageTestTimer += 0.016; // ~60fps
+    if (stageTestTimer > 2) {
+        stageTestTimer = 0;
+        const nextStage = (house.currentStage + 1) % 3;
+        house.setStage(nextStage);
+        console.log(`House stage: ${nextStage}`);
+    }
     
     // Update controls
     controls.update();
@@ -92,3 +108,4 @@ animate();
 
 console.log('FactoryVis scene initialized ✓');
 console.log('Factory floor added ✓');
+console.log('House shell added ✓');
