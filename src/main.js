@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { FactoryFloor, ConveyorBelt, ProductionLine } from './factory.js';
+import { Dashboard } from './ui.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -73,6 +74,9 @@ controls.dampingFactor = 0.05;
 controls.minDistance = 10;
 controls.maxDistance = 100;
 controls.maxPolarAngle = Math.PI / 2; // Prevent camera going below ground
+
+// UI Dashboard
+const dashboard = new Dashboard(productionLine, camera, controls);
 
 // WASD Camera Movement
 const moveSpeed = 20; // Units per second
@@ -156,8 +160,6 @@ window.addEventListener('resize', () => {
 
 // Animation loop
 const clock = new THREE.Clock();
-let statsTimer = 0;
-const statsInterval = 5; // Log stats every 5 seconds
 
 function animate() {
     requestAnimationFrame(animate);
@@ -167,19 +169,8 @@ function animate() {
     // Update production line (handles all houses)
     productionLine.update(deltaTime);
     
-    // Log stats periodically
-    statsTimer += deltaTime;
-    if (statsTimer >= statsInterval) {
-        statsTimer = 0;
-        const stats = productionLine.getStats();
-        console.log('=== Production Stats ===');
-        console.log(`Completed: ${stats.housesCompleted}`);
-        console.log(`In Progress: ${stats.housesInProgress}`);
-        console.log(`Rate: ${stats.housesPerHour}/hour (${stats.housesPerDay}/day)`);
-        console.log(`Elapsed: ${stats.elapsedTime}`);
-        console.log(`Speed: ${stats.productionSpeed}x`);
-        console.log('=======================');
-    }
+    // Update dashboard stats
+    dashboard.update();
     
     // Update camera movement
     updateCameraMovement(deltaTime);
@@ -201,3 +192,4 @@ console.log('Production line active ✓');
 console.log('Movement system active ✓');
 console.log('WASD controls enabled ✓');
 console.log('Stats tracking enabled ✓');
+console.log('UI Dashboard active ✓');

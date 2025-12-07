@@ -54,6 +54,11 @@
         #info .controls strong {
             color: #fff;
         }
+
+        /* dat.GUI styling tweaks */
+        .dg.ac {
+            z-index: 1000 !important;
+        }
     </style>
 </head>
 <body>
@@ -84,6 +89,9 @@
             }
         }
     </script>
+
+    <!-- dat.GUI -->
+    <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
 
     <!-- Main application -->
     <script type="module" src="./src/main.js"></script>
