@@ -4,9 +4,12 @@
 
 A weekend project demonstrating automated house shell production using ThreeJS. Watch houses move through assembly stations, get progressively built, and track real-time production statistics.
 
+> **Built with [Penguin AI Agent](https://github.com/Maximooch/penguin)** - An autonomous coding assistant that helped build this entire project in 90 minutes through pair programming.
+
 ![FactoryVis Demo](https://img.shields.io/badge/Status-Weekend%20MVP-success)
 ![Built with ThreeJS](https://img.shields.io/badge/Built%20with-ThreeJS-blue)
 ![Time to Build](https://img.shields.io/badge/Built%20in-90%20minutes-orange)
+![Built with Penguin](https://img.shields.io/badge/Built%20with-Penguin%20AI-blueviolet)
 
 ---
 
@@ -112,6 +115,7 @@ FactoryVis/
 - **ThreeJS** (r160) - 3D rendering engine
 - **dat.GUI** - Real-time controls and stats
 - **Vanilla JavaScript** - No framework overhead
+- **[Penguin AI Agent](https://github.com/Maximooch/penguin)** - Autonomous coding assistant
 
 ### Architecture
 
@@ -168,6 +172,8 @@ FactoryVis/
 
 **Total Time: ~90 minutes** (Weekend MVP)
 
+**Built entirely through pair programming with [Penguin AI Agent](https://github.com/Maximooch/penguin)**
+
 - **Day 1 (60 min)**: Foundation
   - ThreeJS scene setup
   - Factory floor and conveyor
@@ -211,7 +217,7 @@ MIT License - feel free to use this project for learning or inspiration!
 
 - **ThreeJS** - Amazing 3D library
 - **dat.GUI** - Quick and elegant UI controls
-- **Penguin AI Agent** - Pair programming partner for rapid development
+- **[Penguin AI Agent](https://github.com/Maximooch/penguin)** - Autonomous coding assistant that made rapid development possible
 
 ---
 
@@ -230,4 +236,4 @@ MIT License - feel free to use this project for learning or inspiration!
 
 ---
 
-**Built with ❤️ in a weekend** | [View on GitHub](https://github.com/Maximooch/FactoryVis)
+**Built with ❤️ in a weekend** | [View on GitHub](https://github.com/Maximooch/FactoryVis) | [Penguin AI Agent](https://github.com/Maximooch/penguin)
