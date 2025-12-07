@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FactoryFloor } from './factory.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -39,7 +40,11 @@ directionalLight.shadow.camera.top = 50;
 directionalLight.shadow.camera.bottom = -50;
 scene.add(directionalLight);
 
-// Test cube to verify rendering
+// Factory Floor
+const factoryFloor = new FactoryFloor();
+scene.add(factoryFloor.getGroup());
+
+// Test cube to verify rendering (keeping as size reference)
 const testGeometry = new THREE.BoxGeometry(5, 5, 5);
 const testMaterial = new THREE.MeshStandardMaterial({ 
     color: 0x00ff88,
@@ -52,7 +57,7 @@ testCube.castShadow = true;
 testCube.receiveShadow = true;
 scene.add(testCube);
 
-// OrbitControls (Task 1.3 - adding it now)
+// OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
@@ -86,3 +91,4 @@ function animate() {
 animate();
 
 console.log('FactoryVis scene initialized ✓');
+console.log('Factory floor added ✓');
