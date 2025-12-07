@@ -70,92 +70,36 @@ export class ConveyorBelt {
         ];
         
         this.createBelt();
-        this.createRollers();
         this.createStations();
     }
 
     createBelt() {
-        // Create animated texture for conveyor belt
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d');
-        
-        // Draw repeating pattern (diagonal stripes)
-        ctx.fillStyle = '#1a1a1a';
-        ctx.fillRect(0, 0, 256, 256);
-        
-        ctx.strokeStyle = '#2a2a2a';
-        ctx.lineWidth = 3;
-        
-        // Diagonal lines for visual movement
-        for (let i = 0; i < 20; i++) {
-            ctx.beginPath();
-            ctx.moveTo(i * 20, 0);
-            ctx.lineTo(i * 20 + 50, 256);
-            ctx.stroke();
-        }
-        
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(this.width / 5, this.length / 5);
-        
-        // Main belt surface with animated texture
+        // Main belt surface (polished dark material)
         const beltGeometry = new THREE.BoxGeometry(this.width, this.height, this.length);
         const beltMaterial = new THREE.MeshStandardMaterial({
-            map: texture,
-            roughness: 0.4,
-            metalness: 0.6,
+            color: 0x1a1a1a, // Very dark gray (almost black)
+            roughness: 0.4, // Polished surface
+            metalness: 0.6, // More metallic for futuristic feel
             envMapIntensity: 0.5
         });
         
         this.belt = new THREE.Mesh(beltGeometry, beltMaterial);
-        this.belt.position.set(0, this.height / 2, -this.length / 2);
+        this.belt.position.set(0, this.height / 2, -this.length / 2); // Position so it starts at Z=0
         this.belt.receiveShadow = true;
         this.belt.castShadow = true;
         
-        // Store texture reference for animation
-        this.beltTexture = texture;
-        
         this.group.add(this.belt);
         
-        // Add edge guides
+        // Add edge guides (optional side rails)
         this.createEdgeGuides();
-    }
-
-    createRollers() {
-        // Add visible rollers underneath the belt for realism
-        const rollerCount = 20;
-        const rollerSpacing = this.length / rollerCount;
-        
-        for (let i = 0; i < rollerCount; i++) {
-            const rollerGeometry = new THREE.CylinderGeometry(0.3, 0.3, this.width - 1, 12);
-            const rollerMaterial = new THREE.MeshStandardMaterial({
-                color: 0x444444,
-                roughness: 0.6,
-                metalness: 0.7
-            });
-            
-            const roller = new THREE.Mesh(rollerGeometry, rollerMaterial);
-            roller.position.set(
-                0,
-                -0.1, // Just below belt
-                -i * rollerSpacing
-            );
-            roller.rotation.z = Math.PI / 2; // Rotate to align with belt width
-            roller.castShadow = true;
-            
-            this.group.add(roller);
-        }
     }
 
     createEdgeGuides() {
         const guideGeometry = new THREE.BoxGeometry(0.3, 1, this.length);
         const guideMaterial = new THREE.MeshStandardMaterial({
-            color: 0x888888,
+            color: 0x888888, // Lighter gray for contrast
             roughness: 0.5,
-            metalness: 0.7,
+            metalness: 0.7, // Shiny metal rails
             envMapIntensity: 0.6
         });
         
@@ -181,20 +125,20 @@ export class ConveyorBelt {
             const markerMaterial = new THREE.MeshStandardMaterial({
                 color: station.color,
                 emissive: station.color,
-                emissiveIntensity: 0.5,
-                roughness: 0.3,
+                emissiveIntensity: 0.5, // Stronger glow
+                roughness: 0.3, // Polished
                 metalness: 0.4,
                 envMapIntensity: 0.5
             });
             
             const marker = new THREE.Mesh(markerGeometry, markerMaterial);
             marker.position.set(
-                -this.width / 2 - 3,
-                1,
+                -this.width / 2 - 3, // Left side of conveyor
+                1, // Sitting on floor
                 station.z
             );
             marker.castShadow = true;
-            marker.userData = station;
+            marker.userData = station; // Store station info
             
             this.group.add(marker);
             this.stationMarkers.push(marker);
@@ -202,23 +146,11 @@ export class ConveyorBelt {
     }
 
     /**
-     * Update conveyor belt animation
-     */
-    update(deltaTime, productionSpeed = 1.0) {
-        if (this.beltTexture) {
-            // Scroll texture to simulate belt movement
-            // Speed matches house movement (5 units/sec * production speed)
-            const scrollSpeed = (5 * productionSpeed * deltaTime) / 5; // Adjusted for texture scale
-            this.beltTexture.offset.y -= scrollSpeed;
-        }
-    }
-
-    /**
      * Check if a house is at a station position
      * Returns station data or null
      */
     getStationAtPosition(zPosition) {
-        const tolerance = 1.0;
+        const tolerance = 1.0; // Within 1 unit of station
         
         for (const station of this.stations) {
             if (Math.abs(zPosition - station.z) < tolerance) {
@@ -246,9 +178,9 @@ export class ProductionLine {
         this.conveyor = conveyor;
         
         // Production settings
-        this.maxHouses = 3;
-        this.minSpacing = 25;
-        this.spawnThreshold = -20;
+        this.maxHouses = 3; // Maximum concurrent houses
+        this.minSpacing = 25; // Minimum distance between houses
+        this.spawnThreshold = -20; // Spawn new house when lead house passes this Z
         
         // Active houses array
         this.houses = [];
@@ -256,7 +188,7 @@ export class ProductionLine {
         // Statistics
         this.housesCompleted = 0;
         this.startTime = Date.now();
-        this.productionSpeed = 1.0;
+        this.productionSpeed = 1.0; // Speed multiplier (for future UI control)
         
         // Spawn first house
         this.spawnHouse();
@@ -264,11 +196,11 @@ export class ProductionLine {
 
     spawnHouse() {
         if (this.houses.length >= this.maxHouses) {
-            return;
+            return; // Already at max capacity
         }
         
         const house = new HouseShell();
-        house.getGroup().position.set(0, 0, 0);
+        house.getGroup().position.set(0, 0, 0); // Start at beginning of conveyor
         this.scene.add(house.getGroup());
         this.houses.push(house);
         
@@ -280,14 +212,17 @@ export class ProductionLine {
         for (let i = this.houses.length - 1; i >= 0; i--) {
             const house = this.houses[i];
             
+            // Apply production speed multiplier
             house.update(deltaTime * this.productionSpeed);
             
+            // Check if house is at a station
             const currentStation = this.conveyor.getStationAtPosition(house.getPosition());
             if (currentStation && house.currentStage < currentStation.stage) {
                 house.setStage(currentStation.stage);
                 console.log(`House at Station ${currentStation.stage}: ${currentStation.name}`);
             }
             
+            // Remove house if it's past the end
             if (house.getPosition() < -100) {
                 this.scene.remove(house.getGroup());
                 this.houses.splice(i, 1);
@@ -296,10 +231,7 @@ export class ProductionLine {
             }
         }
         
-        // Update conveyor animation
-        this.conveyor.update(deltaTime, this.productionSpeed);
-        
-        // Spawn new house if there's space
+        // Spawn new house if there's space and lead house has moved forward enough
         if (this.houses.length < this.maxHouses) {
             const shouldSpawn = this.houses.length === 0 || 
                                this.houses[this.houses.length - 1].getPosition() < this.spawnThreshold;
@@ -310,10 +242,14 @@ export class ProductionLine {
         }
     }
 
+    /**
+     * Get production statistics
+     */
     getStats() {
         const elapsedMs = Date.now() - this.startTime;
         const elapsedHours = elapsedMs / (1000 * 60 * 60);
         
+        // Avoid division by zero
         const housesPerHour = elapsedHours > 0 
             ? this.housesCompleted / elapsedHours 
             : 0;
@@ -344,6 +280,9 @@ export class ProductionLine {
         }
     }
 
+    /**
+     * Set production speed multiplier
+     */
     setSpeed(speed) {
         this.productionSpeed = Math.max(0.1, Math.min(5.0, speed));
     }
