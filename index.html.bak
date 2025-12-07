@@ -44,16 +44,6 @@
             font-size: 12px;
             color: #aaa;
         }
-
-        #info .controls {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #444;
-        }
-
-        #info .controls strong {
-            color: #fff;
-        }
     </style>
 </head>
 <body>
@@ -62,17 +52,7 @@
     <div id="info">
         <h1>🏭 FactoryVis</h1>
         <p>Modular House Manufacturing Visualization</p>
-        
-        <div class="controls">
-            <p><strong>Mouse Controls:</strong></p>
-            <p>• Left-click drag: Rotate camera</p>
-            <p>• Scroll: Zoom in/out</p>
-            
-            <p style="margin-top: 8px;"><strong>Keyboard Controls:</strong></p>
-            <p>• <strong>W/A/S/D</strong>: Move camera</p>
-            <p>• <strong>Shift</strong>: Move up</p>
-            <p>• <strong>Space</strong>: Move down</p>
-        </div>
+        <p>Controls: Left-click drag to rotate | Scroll to zoom</p>
     </div>
 
     <!-- ThreeJS via CDN -->
