@@ -20,6 +20,12 @@ export class HouseShell {
         this.speed = 5; // Units per second
         this.isPaused = false;
         
+        // Assembly timing
+        this.isAssembling = false;
+        this.assemblyTimer = 0;
+        this.assemblyDuration = 2.0; // 2 seconds per assembly stage
+        this.targetStage = 0;
+        
         // Create all components (initially hidden except frame)
         this.createFrame();
         this.createWalls();
@@ -107,6 +113,35 @@ export class HouseShell {
     }
 
     /**
+     * Start assembly process to target stage
+     */
+    startAssembly(targetStage) {
+        if (targetStage > this.currentStage) {
+            this.targetStage = targetStage;
+            this.isAssembling = true;
+            this.assemblyTimer = 0;
+            this.isPaused = true; // Pause movement during assembly
+        }
+    }
+
+    /**
+     * Update assembly progress
+     */
+    updateAssembly(deltaTime) {
+        if (!this.isAssembling) return;
+        
+        this.assemblyTimer += deltaTime;
+        
+        if (this.assemblyTimer >= this.assemblyDuration) {
+            // Assembly complete
+            this.setStage(this.targetStage);
+            this.isAssembling = false;
+            this.assemblyTimer = 0;
+            this.isPaused = false; // Resume movement
+        }
+    }
+
+    /**
      * Get the THREE.Group for adding to scene
      */
     getGroup() {
@@ -117,6 +152,10 @@ export class HouseShell {
      * Update method for movement along conveyor
      */
     update(deltaTime) {
+        // Update assembly if in progress
+        this.updateAssembly(deltaTime);
+        
+        // Move only if not paused
         if (!this.isPaused) {
             // Move along negative Z-axis (down the conveyor)
             this.group.position.z -= this.speed * deltaTime;
@@ -139,6 +178,13 @@ export class HouseShell {
      */
     getPosition() {
         return this.group.position.z;
+    }
+
+    /**
+     * Check if currently assembling
+     */
+    isCurrentlyAssembling() {
+        return this.isAssembling;
     }
 }
 

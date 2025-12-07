@@ -196,21 +196,42 @@ export class ConveyorBelt {
             marker.castShadow = true;
             marker.userData = station;
             
+            // Store reference to material for pulsing effect
+            marker.userData.material = markerMaterial;
+            marker.userData.baseIntensity = 0.5;
+            marker.userData.activeIntensity = 1.2;
+            
             this.group.add(marker);
             this.stationMarkers.push(marker);
         });
     }
 
     /**
-     * Update conveyor belt animation
+     * Update conveyor belt animation and station effects
      */
-    update(deltaTime, productionSpeed = 1.0) {
+    update(deltaTime, productionSpeed = 1.0, activeStations = new Set()) {
         if (this.beltTexture) {
             // Scroll texture to simulate belt movement
-            // Speed matches house movement (5 units/sec * production speed)
-            const scrollSpeed = (5 * productionSpeed * deltaTime) / 5; // Adjusted for texture scale
+            const scrollSpeed = (5 * productionSpeed * deltaTime) / 5;
             this.beltTexture.offset.y -= scrollSpeed;
         }
+        
+        // Update station marker glow based on active assembly
+        this.stationMarkers.forEach(marker => {
+            const station = marker.userData;
+            const material = marker.userData.material;
+            const isActive = activeStations.has(station.stage);
+            
+            if (isActive) {
+                // Pulse effect when assembling
+                const pulseSpeed = 3.0; // Pulses per second
+                const pulse = Math.sin(Date.now() / 1000 * pulseSpeed * Math.PI * 2) * 0.5 + 0.5;
+                material.emissiveIntensity = station.baseIntensity + pulse * (station.activeIntensity - station.baseIntensity);
+            } else {
+                // Smoothly return to base intensity
+                material.emissiveIntensity += (station.baseIntensity - material.emissiveIntensity) * 5 * deltaTime;
+            }
+        });
     }
 
     /**
@@ -253,6 +274,9 @@ export class ProductionLine {
         // Active houses array
         this.houses = [];
         
+        // Track which houses have been processed at each station
+        this.processedStations = new Map();
+        
         // Statistics
         this.housesCompleted = 0;
         this.startTime = Date.now();
@@ -272,32 +296,54 @@ export class ProductionLine {
         this.scene.add(house.getGroup());
         this.houses.push(house);
         
+        // Initialize station tracking for this house
+        this.processedStations.set(house, new Set());
+        
         console.log(`Spawned house ${this.houses.length}/${this.maxHouses}`);
     }
 
     update(deltaTime) {
+        // Track which stations are currently active (for visual feedback)
+        const activeStations = new Set();
+        
         // Update all houses
         for (let i = this.houses.length - 1; i >= 0; i--) {
             const house = this.houses[i];
             
             house.update(deltaTime * this.productionSpeed);
             
+            // Track if house is assembling at a station
+            if (house.isCurrentlyAssembling()) {
+                activeStations.add(house.targetStage);
+            }
+            
+            // Check if house is at a station and hasn't been processed there yet
             const currentStation = this.conveyor.getStationAtPosition(house.getPosition());
-            if (currentStation && house.currentStage < currentStation.stage) {
-                house.setStage(currentStation.stage);
-                console.log(`House at Station ${currentStation.stage}: ${currentStation.name}`);
+            if (currentStation) {
+                const processedSet = this.processedStations.get(house);
+                
+                if (!processedSet.has(currentStation.stage) && 
+                    !house.isCurrentlyAssembling() &&
+                    currentStation.stage > house.currentStage) {
+                    
+                    house.startAssembly(currentStation.stage);
+                    processedSet.add(currentStation.stage);
+                    
+                    console.log(`House paused at Station ${currentStation.stage}: ${currentStation.name} - Assembling...`);
+                }
             }
             
             if (house.getPosition() < -100) {
                 this.scene.remove(house.getGroup());
                 this.houses.splice(i, 1);
+                this.processedStations.delete(house);
                 this.housesCompleted++;
                 console.log(`House completed! Total: ${this.housesCompleted}`);
             }
         }
         
-        // Update conveyor animation
-        this.conveyor.update(deltaTime, this.productionSpeed);
+        // Update conveyor animation with active station info
+        this.conveyor.update(deltaTime, this.productionSpeed, activeStations);
         
         // Spawn new house if there's space
         if (this.houses.length < this.maxHouses) {
