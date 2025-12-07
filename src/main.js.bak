@@ -75,6 +75,79 @@ controls.minDistance = 10;
 controls.maxDistance = 100;
 controls.maxPolarAngle = Math.PI / 2; // Prevent camera going below ground
 
+// WASD Camera Movement
+const moveSpeed = 20; // Units per second
+const keyState = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    shift: false, // For moving up
+    space: false  // For moving down
+};
+
+window.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    if (key in keyState) {
+        keyState[key] = true;
+    }
+    if (e.key === 'Shift') keyState.shift = true;
+    if (e.key === ' ') {
+        keyState.space = true;
+        e.preventDefault(); // Prevent page scroll
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    const key = e.key.toLowerCase();
+    if (key in keyState) {
+        keyState[key] = false;
+    }
+    if (e.key === 'Shift') keyState.shift = false;
+    if (e.key === ' ') keyState.space = false;
+});
+
+function updateCameraMovement(deltaTime) {
+    const moveDistance = moveSpeed * deltaTime;
+    
+    // Get camera direction vectors
+    const forward = new THREE.Vector3();
+    camera.getWorldDirection(forward);
+    forward.y = 0; // Keep movement horizontal
+    forward.normalize();
+    
+    const right = new THREE.Vector3();
+    right.crossVectors(forward, camera.up).normalize();
+    
+    // WASD movement
+    if (keyState.w) {
+        camera.position.addScaledVector(forward, moveDistance);
+        controls.target.addScaledVector(forward, moveDistance);
+    }
+    if (keyState.s) {
+        camera.position.addScaledVector(forward, -moveDistance);
+        controls.target.addScaledVector(forward, -moveDistance);
+    }
+    if (keyState.a) {
+        camera.position.addScaledVector(right, -moveDistance);
+        controls.target.addScaledVector(right, -moveDistance);
+    }
+    if (keyState.d) {
+        camera.position.addScaledVector(right, moveDistance);
+        controls.target.addScaledVector(right, moveDistance);
+    }
+    
+    // Vertical movement (Shift = up, Space = down)
+    if (keyState.shift) {
+        camera.position.y += moveDistance;
+        controls.target.y += moveDistance;
+    }
+    if (keyState.space) {
+        camera.position.y -= moveDistance;
+        controls.target.y -= moveDistance;
+    }
+}
+
 // Handle window resize
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -112,6 +185,9 @@ function animate() {
         console.log('House completed! Resetting to start...');
     }
     
+    // Update camera movement
+    updateCameraMovement(deltaTime);
+    
     // Update controls
     controls.update();
     
@@ -127,3 +203,4 @@ console.log('Factory floor added ✓');
 console.log('Conveyor belt added ✓');
 console.log('House shell added ✓');
 console.log('Movement system active ✓');
+console.log('WASD controls enabled ✓');

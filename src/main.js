@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { FactoryFloor, ConveyorBelt } from './factory.js';
-import { HouseShell } from './house.js';
+import { FactoryFloor, ConveyorBelt, ProductionLine } from './factory.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -49,12 +48,11 @@ scene.add(factoryFloor.getGroup());
 const conveyor = new ConveyorBelt();
 scene.add(conveyor.getGroup());
 
-// House Shell (starts at beginning of conveyor)
-const house = new HouseShell();
-house.getGroup().position.set(0, 0, 0); // Start at Z=0
-scene.add(house.getGroup());
+// Production Line (manages multiple houses)
+const productionLine = new ProductionLine(scene, conveyor);
 
-// Test cube (keeping as size reference for now)
+// Test cube (commented out - kept for debugging reference)
+/*
 const testGeometry = new THREE.BoxGeometry(5, 5, 5);
 const testMaterial = new THREE.MeshStandardMaterial({ 
     color: 0x00ff88,
@@ -62,10 +60,11 @@ const testMaterial = new THREE.MeshStandardMaterial({
     roughness: 0.6
 });
 const testCube = new THREE.Mesh(testGeometry, testMaterial);
-testCube.position.set(15, 2.5, -30); // Move to side
+testCube.position.set(15, 2.5, -30);
 testCube.castShadow = true;
 testCube.receiveShadow = true;
 scene.add(testCube);
+*/
 
 // OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -157,32 +156,29 @@ window.addEventListener('resize', () => {
 
 // Animation loop
 const clock = new THREE.Clock();
+let statsTimer = 0;
+const statsInterval = 5; // Log stats every 5 seconds
 
 function animate() {
     requestAnimationFrame(animate);
     
     const deltaTime = clock.getDelta();
     
-    // Rotate test cube
-    testCube.rotation.x += 0.01;
-    testCube.rotation.y += 0.01;
+    // Update production line (handles all houses)
+    productionLine.update(deltaTime);
     
-    // Update house movement
-    house.update(deltaTime);
-    
-    // Check if house is at a station
-    const currentStation = conveyor.getStationAtPosition(house.getPosition());
-    if (currentStation && house.currentStage < currentStation.stage) {
-        // House reached a new station - assemble next stage
-        house.setStage(currentStation.stage);
-        console.log(`Station ${currentStation.stage}: ${currentStation.name} - Stage ${currentStation.stage} complete`);
-    }
-    
-    // Reset house if it goes past the end
-    if (house.getPosition() < -100) {
-        house.getGroup().position.z = 0;
-        house.setStage(0);
-        console.log('House completed! Resetting to start...');
+    // Log stats periodically
+    statsTimer += deltaTime;
+    if (statsTimer >= statsInterval) {
+        statsTimer = 0;
+        const stats = productionLine.getStats();
+        console.log('=== Production Stats ===');
+        console.log(`Completed: ${stats.housesCompleted}`);
+        console.log(`In Progress: ${stats.housesInProgress}`);
+        console.log(`Rate: ${stats.housesPerHour}/hour (${stats.housesPerDay}/day)`);
+        console.log(`Elapsed: ${stats.elapsedTime}`);
+        console.log(`Speed: ${stats.productionSpeed}x`);
+        console.log('=======================');
     }
     
     // Update camera movement
@@ -201,6 +197,7 @@ animate();
 console.log('FactoryVis scene initialized ✓');
 console.log('Factory floor added ✓');
 console.log('Conveyor belt added ✓');
-console.log('House shell added ✓');
+console.log('Production line active ✓');
 console.log('Movement system active ✓');
 console.log('WASD controls enabled ✓');
+console.log('Stats tracking enabled ✓');
