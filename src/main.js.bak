@@ -1,0 +1,4 @@
+// Main ThreeJS scene setup
+// Task 1.2 will populate this
+
+console.log('FactoryVis initializing...');
