@@ -11,6 +11,11 @@ export class Dashboard {
         
         // Stats object for dat.GUI (needs to be mutable)
         this.stats = {
+            // Performance stats
+            fps: '60',
+            frameTime: '16ms',
+            
+            // Production stats
             housesCompleted: 0,
             housesInProgress: 0,
             housesPerHour: '0.0',
@@ -18,6 +23,15 @@ export class Dashboard {
             elapsedTime: '0s',
             productionSpeed: 1.0
         };
+        
+        // Performance tracking
+        this.frameCount = 0;
+        this.lastFpsUpdate = performance.now();
+        this.frameTimes = [];
+        this.maxFrameTimeSamples = 60;
+        
+        // Control flags
+        this.isPaused = false;
         
         // Camera presets
         this.cameraPresets = {
@@ -32,6 +46,12 @@ export class Dashboard {
 
     createGUI() {
         this.gui = new dat.GUI({ width: 300 });
+        
+        // Performance Stats folder
+        const perfFolder = this.gui.addFolder('⚡ Performance');
+        perfFolder.add(this.stats, 'fps').name('FPS').listen();
+        perfFolder.add(this.stats, 'frameTime').name('Frame Time').listen();
+        perfFolder.open();
         
         // Production Stats folder
         const statsFolder = this.gui.addFolder('📊 Production Stats');
@@ -49,6 +69,10 @@ export class Dashboard {
             .onChange((value) => {
                 this.productionLine.setSpeed(value);
             });
+        controlsFolder.add(this, 'togglePause').name('⏸️ Pause / ▶️ Resume');
+        controlsFolder.add(this, 'resetProduction').name('🔄 Reset Production');
+        controlsFolder.open();
+        
         controlsFolder.open();
         
         // Camera Presets folder
@@ -60,7 +84,10 @@ export class Dashboard {
         cameraFolder.open();
     }
 
-    update() {
+    update(deltaTime) {
+        // Update performance stats
+        this.updatePerformanceStats(deltaTime);
+        
         // Update stats from production line
         const prodStats = this.productionLine.getStats();
         this.stats.housesCompleted = prodStats.housesCompleted;
@@ -69,6 +96,42 @@ export class Dashboard {
         this.stats.housesPerDay = prodStats.housesPerDay;
         this.stats.elapsedTime = prodStats.elapsedTime;
         this.stats.productionSpeed = prodStats.productionSpeed;
+    }
+
+    updatePerformanceStats(deltaTime) {
+        // Track frame time
+        const frameTimeMs = deltaTime * 1000;
+        this.frameTimes.push(frameTimeMs);
+        if (this.frameTimes.length > this.maxFrameTimeSamples) {
+            this.frameTimes.shift();
+        }
+        
+        // Calculate average frame time
+        const avgFrameTime = this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
+        this.stats.frameTime = avgFrameTime.toFixed(1) + 'ms';
+        
+        // Update FPS counter (once per second)
+        this.frameCount++;
+        const now = performance.now();
+        const elapsed = now - this.lastFpsUpdate;
+        
+        if (elapsed >= 1000) {
+            const fps = Math.round((this.frameCount * 1000) / elapsed);
+            this.stats.fps = fps.toString();
+            this.frameCount = 0;
+            this.lastFpsUpdate = now;
+        }
+    }
+
+    togglePause() {
+        this.isPaused = !this.isPaused;
+        this.productionLine.setPaused(this.isPaused);
+        console.log(this.isPaused ? '⏸️ Production paused' : '▶️ Production resumed');
+    }
+
+    resetProduction() {
+        this.productionLine.reset();
+        console.log('🔄 Production reset');
     }
 
     // Camera preset methods

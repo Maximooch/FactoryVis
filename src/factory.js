@@ -282,6 +282,9 @@ export class ProductionLine {
         this.startTime = Date.now();
         this.productionSpeed = 1.0;
         
+        // Pause state
+        this.isPaused = false;
+        
         // Spawn first house
         this.spawnHouse();
     }
@@ -303,6 +306,11 @@ export class ProductionLine {
     }
 
     update(deltaTime) {
+        // Skip updates if paused
+        if (this.isPaused) {
+            return;
+        }
+        
         // Track which stations are currently active (for visual feedback)
         const activeStations = new Set();
         
@@ -392,6 +400,26 @@ export class ProductionLine {
 
     setSpeed(speed) {
         this.productionSpeed = Math.max(0.1, Math.min(5.0, speed));
+    }
+
+    setPaused(paused) {
+        this.isPaused = paused;
+    }
+
+    reset() {
+        // Remove all houses from scene
+        this.houses.forEach(house => {
+            this.scene.remove(house.getGroup());
+        });
+
+        // Clear arrays and reset stats
+        this.houses = [];
+        this.processedStations.clear();
+        this.housesCompleted = 0;
+        this.startTime = Date.now();
+
+        // Spawn first house
+        this.spawnHouse();
     }
 }
 

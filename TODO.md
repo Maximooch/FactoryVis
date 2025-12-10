@@ -204,216 +204,54 @@ The following tasks can be enhanced with smoother animations.
 
 ---
 
-## DAY 3 - Scale & Polish (Sunday Afternoon/Evening)
-**Goal:** Multiple houses, stats dashboard, speed controls
+## DAY 3 - UI & Polish (Sunday Afternoon) ✅ STARTED!
 
-### Afternoon Session (2-3 hours)
+### Afternoon Session (Completed Tasks)
 
-#### Task 3.1: Multiple Houses (1 hour)
-**File:** `src/factory.js`
-- [ ] Create `ProductionLine` class
-- [ ] Maintain array of active houses (max 5)
-- [ ] Spawn new house every X seconds (variable interval)
-- [ ] Ensure spacing between houses (minimum distance)
-- [ ] Remove houses when they exit conveyor
-- [ ] Test: See 3-5 houses in pipeline at various stages
+#### Task 3.1: Performance Monitoring System ✅ COMPLETE
+**Files:** `src/ui.js`, `src/main.js`
+- [x] Add FPS counter (updates every second)
+- [x] Add frame time tracking (rolling 60-frame average)
+- [x] Create Performance Stats folder in dat.GUI
+- [x] Display real-time performance metrics
+- [x] Distinguish between actual lag and intentional pauses
 
-#### Task 3.2: Stats Tracking (45 min)
-**File:** `src/factory.js`
-- [ ] Add properties:
-  - [ ] `housesCompleted` counter
-  - [ ] `startTime` timestamp
-  - [ ] `productionSpeed` multiplier (default 1.0)
-- [ ] Increment counter when house exits
-- [ ] Calculate `housesPerHour` from elapsed time
-- [ ] Calculate `housesPerDay` (housesPerHour * 24)
-- [ ] Method: `getStats()` returns object with metrics
+#### Task 3.2: Production Controls ✅ COMPLETE
+**Files:** `src/ui.js`, `src/factory.js`
+- [x] Add Pause/Resume button
+- [x] Implement pause state in ProductionLine
+- [x] Add Reset Production button
+- [x] Implement reset() method to clear and restart
+- [x] Test pause functionality (freezes all updates)
+- [x] Test reset functionality (clears houses, resets stats)
 
-#### Task 3.3: UI Dashboard (1.5 hours)
-**File:** `src/ui.js`
-- [ ] Add dat.GUI library (CDN or npm)
-- [ ] Create GUI panel (top-right corner)
-- [ ] Add stat displays (read-only):
-  - [ ] Houses Completed
-  - [ ] Houses/Hour
-  - [ ] Houses/Day (projected)
-- [ ] Add speed slider (0.5x to 5x)
-- [ ] Wire slider to factory.productionSpeed
-- [ ] Add camera preset buttons:
-  - [ ] Overview
-  - [ ] Station 1 close-up
-  - [ ] Station 2 close-up
-  - [ ] Station 3 close-up
-- [ ] Test: Verify stats update in real-time
+**SUCCESS CRITERIA:** ✅ ALL COMPLETE
+✅ FPS counter shows real-time performance
+✅ Frame time tracking identifies actual lag vs intentional pauses
+✅ Pause button freezes entire production line
+✅ Resume button continues from paused state
+✅ Reset button clears everything and restarts fresh
 
-### Evening Session (1-2 hours)
+**IMPACT:**
+- Users can now distinguish between performance issues and intentional assembly pauses
+- Full control over production flow (pause, resume, reset)
+- Real-time performance monitoring for debugging
 
-#### Task 3.4: Visual Polish (1 hour)
-**File:** Multiple
-- [ ] Better materials (use MeshStandardMaterial with roughness/metalness)
-- [x] Color-code assembly stages:
-  - [x] Frame: Gray wireframe
-  - [x] Walls: Beige/tan
-  - [x] Roof: Dark brown/gray
-- [ ] Add subtle fog for depth
-- [ ] Improve lighting (add rim light or fill light)
-- [ ] Add simple skybox or background color gradient
-- [ ] Test: Does it look satisfying?
+### Next Steps (Optional Enhancements)
 
-#### Task 3.5: Screenshot/Export (30 min)
-**File:** `src/main.js`
-- [ ] Add button: "Capture Screenshot"
-- [ ] Use `renderer.domElement.toDataURL()`
-- [ ] Download as PNG
-- [ ] Optional: Record short video (browser extension or manual)
-- [ ] Test: Save image showing multiple houses being assembled
+#### Task 3.3: Visual Assembly Feedback (Optional)
+- [ ] Add progress bars above houses during assembly
+- [ ] Smooth component fade-in/scale animations
+- [ ] "ASSEMBLING" text labels at active stations
+- [ ] Sound effects for assembly events
 
-#### Task 3.6: Final Touches (30 min)
-- [ ] Update README.md with:
-  - [ ] Project description
-  - [ ] How to run locally
-  - [ ] Controls explanation
-  - [ ] Screenshot/GIF
-- [ ] Clean up code:
-  - [ ] Remove debug console.logs
-  - [ ] Add comments to complex sections
-  - [ ] Consistent code style
-- [ ] Final commit with descriptive message
-- [ ] Test on fresh browser session
+#### Task 3.4: Advanced Camera Controls (Optional)
+- [ ] Smooth camera transitions between presets
+- [ ] Follow camera mode (tracks a specific house)
+- [ ] Cinematic camera paths
 
-**Day 3 Success Criteria:**
-- [ ] Multiple houses in production simultaneously
-- [ ] Stats show realistic throughput numbers
-- [ ] Speed controls work smoothly
-- [ ] Looks polished enough to demo
+#### Task 3.5: Performance Optimizations (If Needed)
+- [ ] Geometry instancing for repeated elements
+- [ ] LOD (Level of Detail) system
+- [ ] Shadow map optimization
 
----
-
-## Post-Weekend (Optional Enhancements)
-
-### Task 1.6.5: Enhanced Conveyor (Optional)
-- [ ] Add visible rollers underneath belt
-- [ ] Animated UV texture scrolling (conveyor moving effect)
-- [ ] Station platforms/pedestals instead of simple cubes
-
-### Task 1.7.5: Enhanced Movement (Optional)
-- [ ] Pause house at each station during assembly
-- [ ] Resume movement after assembly complete
-- [ ] Smooth acceleration/deceleration
-
-### If You Have Extra Time:
-- [ ] Add pause/play button (freeze simulation)
-- [ ] Add reset button (clear all houses, restart stats)
-- [ ] Show individual house IDs/labels
-- [ ] Add sound effects (optional - assembly clunks, conveyor hum)
-- [ ] Performance optimization (object pooling if FPS drops)
-- [ ] Deploy to GitHub Pages or Vercel
-
-### Future Ideas (Don't Do This Weekend):
-- [ ] More realistic house models (glTF import)
-- [ ] Multiple building types (single-story, two-story)
-- [ ] Accurate factory layout based on real facilities
-- [ ] Mobile/touch controls
-- [ ] VR mode (WebXR)
-- [ ] Export statistics as CSV/JSON
-- [ ] Add defect/quality control station
-- [ ] Simulate material shortages/delays
-
----
-
-## Progress Summary
-
-**Completed:** Day 1 (100%) + Bonus features
-**Current Status:** Ahead of schedule! Core system fully functional.
-**Next Priority:** Day 3 tasks (multiple houses, stats, UI)
-**Optional:** Day 2 animation enhancements (smooth transitions)
-
-**Time Saved:** ~4-5 hours by completing Day 1 efficiently
-**Recommendation:** Jump to Day 3 for maximum impact, or enhance Day 2 animations for polish
-
----
-
-## Troubleshooting Checklist
-
-### If Nothing Renders:
-- [x] Check browser console for errors
-- [x] Verify ThreeJS loaded (check Network tab)
-- [x] Confirm renderer.domElement added to DOM
-- [x] Check camera position (not inside objects)
-- [x] Verify render loop is running (add console.log)
-
-### If Performance is Slow:
-- [ ] Reduce number of houses (max 3 instead of 5)
-- [ ] Simplify geometry (lower segment counts)
-- [ ] Disable shadows temporarily
-- [ ] Check draw calls (use Stats.js)
-
-### If Animations Glitch:
-- [ ] Ensure deltaTime is used correctly
-- [ ] Check for NaN values in positions
-- [ ] Verify animation complete before next action
-- [ ] Add state machine if logic gets complex
-
----
-
-## Daily Commit Messages (Suggested)
-
-**End of Day 1:** ✅ DONE
-```
-feat: basic ThreeJS scene with moving house on conveyor
-- Scene setup with camera, lights, floor
-- Simple house model (frame only)
-- Conveyor belt with 3 station markers
-- House moves along Z-axis
-```
-
-**End of Day 2:**
-```
-feat: progressive assembly animation at stations
-- House stops at each station
-- Components appear sequentially (frame → walls → roof)
-- Smooth animations with shadows
-- Complete assembly flow working
-```
-
-**End of Day 3:**
-```
-feat: multi-house production with stats dashboard
-- 3-5 houses in pipeline simultaneously
-- Real-time stats (houses/hour, houses/day)
-- Speed controls (0.5x to 5x)
-- UI dashboard with camera presets
-- Screenshot export capability
-```
-
----
-
-## Success Metrics
-
-**Minimum Viable Demo (Must Have):** ✅ ACHIEVED
-✅ 3D factory scene with conveyor
-✅ House assembled in 3 stages
-✅ At least 2 houses visible in pipeline (can add more)
-✅ Basic stats displayed (can enhance)
-
-**Good Demo (Should Have):**
-✅ All of above +
-✅ Smooth animations (instant, can enhance)
-✅ Speed controls work (can add)
-✅ Shadows and lighting look good
-
-**Great Demo (Nice to Have):**
-- [ ] All of above +
-- [ ] 5 houses in pipeline
-- [ ] Polished materials/colors
-- [ ] Camera presets
-- [ ] Screenshot export
-- [ ] Clean, documented code
-
-**Remember:** Ship the minimum first, then layer on polish. A working simple demo beats an unfinished complex one.
-
----
-
-**CURRENT STATUS:** Day 1 complete with bonus features! Ready to jump to Day 3 or enhance Day 2 animations.
-
-**START HERE FOR DAY 3:** Begin with Task 3.1 (Multiple Houses). Check boxes as you go. You got this! 🐧

@@ -207,7 +207,7 @@ function animate() {
     productionLine.update(deltaTime);
     
     // Update dashboard stats
-    dashboard.update();
+    dashboard.update(deltaTime);
     
     // Update camera movement
     updateCameraMovement(deltaTime);
