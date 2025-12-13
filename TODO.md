@@ -1,302 +1,246 @@
 # FactoryVis - Side Project TODO List
 
-**Purpose:** Granular task breakdown with checkboxes. Originally a weekend project, now a long-term side project for continued learning and polish.
+**Purpose:** Granular task breakdown with checkboxes. Tesla Gigafactory-inspired modular house factory visualization.
+
+**Design Direction:** 
+- Tesla Gigafactory aesthetic (clean, minimalist, industrial)
+- Realistic physics-based animations
+- Mechanical assembly processes (robotic arms, cranes, AGVs)
+- Future: Penguin workers (realistic style)
 
 **Timeline:** 
 - Week 1 (Complete): Core foundation, assembly system, basic UI
-- Ongoing: Enhancements, polish, and experimental features as time permits
-
-**Approach:** Work on this when you have spare time. No pressure, no deadlines. Focus on learning and having fun with ThreeJS.
-
----
-
-## Setup (Before Starting)
-
-- [x] Read through PLAN.md completely
-- [x] Install Node.js/npm (if not already installed)
-- [x] Create basic project structure
-- [x] Initialize git repo (already done ✓)
-- [x] Set up local dev server (npx http-server on port 8080)
+- Current: Realistic assembly animations & logistics
+- Future: Penguin workers
 
 ---
 
-## DAY 1 - Foundation (Saturday) ✅ COMPLETE!
-**Goal:** See a 3D scene with something moving by end of day
+## Completed Phases ✅
 
-### Morning Session (2-3 hours) ✅
+<details>
+<summary>Phase 1 - Foundation (Click to expand)</summary>
 
-#### Task 1.1: Project Scaffolding (30 min) ✅
-- [x] Create `index.html` with basic structure
-- [x] Add ThreeJS via CDN (importmap)
-- [x] Create `src/` directory
-- [x] Create empty files:
-  - [x] `src/main.js`
-  - [x] `src/factory.js`
-  - [x] `src/house.js`
-  - [x] `src/ui.js`
-- [x] Link main.js in index.html as module
-- [x] Test: Open in browser, check console for errors
+### Setup
+- [x] Project scaffolding (index.html, src/, ThreeJS CDN)
+- [x] Basic ThreeJS scene (camera, lights, renderer)
+- [x] OrbitControls + WASD camera controls
+- [x] Factory floor with grid
 
-#### Task 1.2: Basic ThreeJS Scene (45 min) ✅
-**File:** `src/main.js`
-- [x] Import ThreeJS
-- [x] Create scene, camera, renderer
-- [x] Set up canvas and viewport sizing
-- [x] Add ambient light + directional light
-- [x] Create simple cube to verify rendering
-- [x] Add render loop (requestAnimationFrame)
-- [x] Test: See a rotating cube on screen
+### Core Elements
+- [x] House shell model (frame, walls, roof)
+- [x] Conveyor belt with station markers
+- [x] Basic movement along conveyor
+- [x] Auto-reset loop
 
-#### Task 1.3: Camera Controls (30 min) ✅
-**File:** `src/main.js`
-- [x] Import OrbitControls from ThreeJS examples
-- [x] Attach controls to camera
-- [x] Set camera initial position (elevated, angled)
-- [x] Configure controls (damping, limits)
-- [x] Test: Click-drag to rotate view, scroll to zoom
-- [x] **BONUS:** Added WASD keyboard controls for free-roam camera
+</details>
 
-#### Task 1.4: Factory Floor (45 min) ✅
-**File:** `src/factory.js`
-- [x] Create `FactoryFloor` class
-- [x] Add large plane geometry for ground
-- [x] Apply basic material (gray concrete color)
-- [x] Add grid helper for reference
-- [x] Add axis helper (optional, for debugging)
-- [x] Export and add to main scene
-- [x] Test: See factory floor from above
+<details>
+<summary>Phase 2 - Assembly System (Click to expand)</summary>
 
-### Afternoon Session (2-3 hours) ✅
+- [x] 3 Assembly stations with visual markers
+- [x] Station detection system
+- [x] Assembly trigger (stage 0→1→2→3)
+- [x] Shadows and lighting
 
-#### Task 1.5: Simple House Model (1 hour) ✅
-**File:** `src/house.js`
-- [x] Create `HouseShell` class
-- [x] Define basic dimensions (width: 10, height: 8, depth: 12)
-- [x] Create frame (BoxGeometry with wireframe material)
-- [x] Create walls (BoxGeometry with solid material)
-- [x] Create roof (BoxGeometry, positioned on top)
-- [x] Method: `assemble(stage)` - shows components based on stage 0-3
-- [x] Initially render just frame (stage 0)
-- [x] Test: See house frame on factory floor
+</details>
 
-#### Task 1.6: Conveyor Belt Basics (1 hour) ✅
-**File:** `src/factory.js`
-- [x] Create `ConveyorBelt` class
-- [x] Add long box geometry for belt surface
-- [x] Position along Z-axis (0 to -100)
-- [x] Add simple material (dark gray/black)
-- [x] **BONUS:** Added edge guide rails
-- [x] Create 3 station markers (colored boxes at positions)
-  - [x] Station 1 (Z: -20): Frame assembly (Red)
-  - [x] Station 2 (Z: -50): Walls assembly (Yellow/Orange)
-  - [x] Station 3 (Z: -80): Roof assembly (Green)
-- [x] Test: See conveyor with 3 station markers
+<details>
+<summary>Phase 3 - UI & Controls (Click to expand)</summary>
 
-#### Task 1.7: Basic Movement (45 min) ✅
-**File:** `src/factory.js`
-- [x] Add `update(deltaTime)` method to HouseShell
-- [x] Move house along Z-axis (position.z -= speed * deltaTime)
-- [x] Place house at start of conveyor
-- [x] In main.js render loop, call house.update()
-- [x] **BONUS:** Added automatic station detection
-- [x] **BONUS:** Added auto-reset loop when house completes
-- [x] Test: Watch house move along conveyor
+- [x] dat.GUI integration
+- [x] FPS counter and frame time tracking
+- [x] Pause/Resume/Reset controls
+- [x] Speed controls
 
-### Evening Wrap-up (30 min) ✅
-- [x] Clean up console.log statements
-- [x] Adjust camera position for best view
-- [x] Verify all files are saved and committed
-- [x] Test full scene: floor, conveyor, moving house
-- [x] Screenshot for progress
-
-**Day 1 Success Criteria:** ✅ ALL COMPLETE
-✅ 3D scene renders smoothly
-✅ Can orbit camera around scene
-✅ House moves along conveyor belt
-✅ 3 assembly stations visible
-✅ **BONUS:** WASD camera controls
-✅ **BONUS:** Automatic assembly at stations
-✅ **BONUS:** Looping production system
+</details>
 
 ---
 
-## PHASE 2 - Assembly Magic ✅ CORE COMPLETE
-**Goal:** Progressive assembly animation at each station (core done, animations are stretch goals)
+## Phase 4 - Realistic Assembly Animations 🔄 CURRENT
 
-**STATUS:** Day 1 completed all core functionality! Assembly already working.
-The following tasks can be enhanced with smoother animations.
+### 4A: Station Pause & Timing
+**Goal:** House pauses at each station for assembly
 
-### Morning Session (2-3 hours)
+- [ ] Add `isPaused` state to house when at station
+- [ ] Configurable `dwellTime` per station (e.g., 3 seconds)
+- [ ] Smooth deceleration when approaching station
+- [ ] Smooth acceleration when leaving station
+- [ ] Visual indicator (pulsing glow or progress bar)
+- [ ] Test: House stops, assembles, continues
 
-#### Task 2.1: Station Detection (45 min) ✅ DONE EARLY
-**File:** `src/factory.js`
-- [x] Create `AssemblyStation` class (integrated into ConveyorBelt)
-- [x] Add property: `position` (Z coordinate)
-- [x] Add property: `assemblyStage` (0-3)
-- [x] Add method: `isHouseAtStation(house)` - check if house Z matches
-- [x] Create array of 3 stations in FactoryFloor
-- [x] Test: Log when house reaches each station
+### 4B: Component Animations  
+**Goal:** Parts animate into place realistically
 
-#### Task 2.2: Assembly Trigger System (1 hour) ⚠️ BASIC VERSION DONE
-**File:** `src/house.js`
-- [x] Add `currentStage` property (starts at 0)
-- [x] Add `targetStage` property
-- [x] Method: `setTargetStage(stage)` - triggers assembly
-- [ ] Method: `updateAssembly()` - progressively shows components
-- [x] Visibility toggles:
-  - [x] Stage 0: Frame visible
-  - [x] Stage 1: Frame + Walls visible
-  - [x] Stage 2: Frame + Walls + Roof visible
-- [x] Test: Manually call setTargetStage(1), verify walls appear
+#### Frame Assembly (Station 1)
+- [ ] Frame starts below floor or off to side
+- [ ] Animate frame rising/sliding into position
+- [ ] Add easing (ease-out for realistic deceleration)
+- [ ] Duration: ~1.5 seconds
 
-**NOTE:** Currently instant visibility toggle. Can enhance with smooth animations.
+#### Wall Assembly (Station 2)
+- [ ] Walls start off to sides (perpendicular to conveyor)
+- [ ] Animate walls sliding inward simultaneously
+- [ ] Walls "click" into place (small bounce or settle)
+- [ ] Duration: ~2 seconds
 
-#### Task 2.3: Assembly Animation (1 hour) 🔄 ENHANCEMENT OPPORTUNITY
-**File:** `src/house.js`
-- [ ] Add components with initial scale/position offsets
-- [ ] Animate walls sliding in from sides (scale Y from 0 to 1)
-- [ ] Animate roof dropping from above (position Y from +10 to 0)
-- [ ] Use lerp or ThreeJS Tween for smooth animation
-- [ ] Add small delay between components (0.5s)
-- [ ] Test: Watch components smoothly appear
+#### Roof Assembly (Station 3)
+- [ ] Roof starts above (held by crane/gantry)
+- [ ] Animate roof lowering onto house
+- [ ] Slight settle animation at end
+- [ ] Duration: ~2 seconds
 
-**CURRENT:** Instant pop-in. **ENHANCEMENT:** Smooth animations.
+#### Animation Utilities
+- [ ] Create `src/animation.js` utility module
+- [ ] Implement easing functions (easeInOut, easeOut, etc.)
+- [ ] Create `AnimatedComponent` class for reusable animations
+- [ ] Queue system for sequential animations
 
-### Afternoon Session (2-3 hours)
+### 4C: Assembly Machinery
+**Goal:** Visual machinery performing the assembly
 
-#### Task 2.4: Integrate Stations + Assembly (1.5 hours) ✅ DONE EARLY
-**File:** `src/factory.js`
-- [x] In conveyor update loop, check house position vs stations
-- [x] When house reaches station:
-  - [x] Pause house movement (can add if desired)
-  - [x] Trigger house.setTargetStage(station.assemblyStage)
-  - [ ] Wait for assembly animation to complete
-  - [x] Resume house movement
-- [ ] Add `isPaused` flag to house (exists but not used for station stops)
-- [x] Test: House stops at Station 1, frame appears, continues
+#### Robotic Arms (Stations 1 & 2)
+- [ ] Create `RoboticArm` class in `src/machinery.js`
+- [ ] Simple geometry: base cylinder, 2-3 arm segments, gripper
+- [ ] Hierarchical structure (parent-child for articulation)
+- [ ] Arm positions: rest, reach, grab, place, retract
+- [ ] Animate arm during assembly sequence
 
-**NOTE:** House currently doesn't pause at stations, just assembles while moving.
+#### Overhead Crane (Station 3)
+- [ ] Create `OverheadCrane` class
+- [ ] Gantry structure spanning assembly line
+- [ ] Trolley that moves along gantry
+- [ ] Hoist/cable that lowers roof
+- [ ] Animate: trolley positions, hoist lowers/raises
 
-#### Task 2.5: Multi-Station Flow (1 hour) ✅ DONE EARLY
-**File:** `src/factory.js`
-- [x] Ensure house visits all 3 stations in sequence
-- [x] Station 1: Add frame (stage 0→1)
-- [x] Station 2: Add walls (stage 1→2)
-- [x] Station 3: Add roof (stage 2→3)
-- [x] Add exit point (Z: -100) where house despawns
-- [x] Test: Watch complete assembly process start to finish
-
-#### Task 2.6: Lighting & Shadows (30 min) ✅ DONE EARLY
-**File:** `src/main.js`
-- [x] Enable shadow rendering on renderer
-- [x] Configure directional light to cast shadows
-- [x] Enable shadows on house components
-- [x] Enable shadows on factory floor (receive)
-- [x] Adjust shadow camera (size, near, far)
-- [x] Test: See realistic shadows under house
-
-### Evening Wrap-up (30 min)
-- [ ] Adjust animation timing (too fast/slow?)
-- [x] Fine-tune camera angle for best drama
-- [ ] Add station labels (optional TextGeometry or HTML overlays)
-- [x] Commit progress
-- [ ] Screenshot/video of assembly process
-
-**Day 2 Success Criteria:**
-✅ House stops at each station (can enhance with pause)
-✅ Components appear progressively (instant, can animate)
-⚠️ Smooth animations (enhancement opportunity)
-✅ Shadows add depth
+#### Clamps & Fixtures
+- [ ] Simple clamp geometry at each station
+- [ ] Animate clamps engaging when house arrives
+- [ ] Clamps release when assembly complete
 
 ---
 
-## PHASE 3 - UI & Polish ✅ CORE COMPLETE
+## Phase 5 - Logistics System
 
-### Completed Tasks
+### 5A: Factory Layout Expansion
+**Goal:** Gigafactory-style layout with visible parts flow
 
-#### Task 3.1: Performance Monitoring System ✅ COMPLETE
-**Files:** `src/ui.js`, `src/main.js`
-- [x] Add FPS counter (updates every second)
-- [x] Add frame time tracking (rolling 60-frame average)
-- [x] Create Performance Stats folder in dat.GUI
-- [x] Display real-time performance metrics
-- [x] Distinguish between actual lag and intentional pauses
+- [ ] Expand factory floor dimensions
+- [ ] Add parts storage zone (side of main line)
+- [ ] Add staging area between storage and line
+- [ ] Floor markings (colored zones, safety lines)
+- [ ] Update camera bounds for larger area
 
-#### Task 3.2: Production Controls ✅ COMPLETE
-**Files:** `src/ui.js`, `src/factory.js`
-- [x] Add Pause/Resume button
-- [x] Implement pause state in ProductionLine
-- [x] Add Reset Production button
-- [x] Implement reset() method to clear and restart
-- [x] Test pause functionality (freezes all updates)
-- [x] Test reset functionality (clears houses, resets stats)
+### 5B: Parts Storage & Staging
+- [ ] Wall panel racks (vertical storage)
+- [ ] Roof section staging (overhead or ground level)
+- [ ] Frame staging area
+- [ ] Visual inventory indicators
 
-**SUCCESS CRITERIA:** ✅ ALL COMPLETE
-✅ FPS counter shows real-time performance
-✅ Frame time tracking identifies actual lag vs intentional pauses
-✅ Pause button freezes entire production line
-✅ Resume button continues from paused state
-✅ Reset button clears everything and restarts fresh
+### 5C: Parts Transport
+- [ ] AGV (Automated Guided Vehicle) model
+- [ ] AGV path from storage to staging
+- [ ] AGV picks up parts, delivers to line
+- [ ] Alternative: perpendicular conveyor feeds
 
-**IMPACT:**
-- Users can now distinguish between performance issues and intentional assembly pauses
-- Full control over production flow (pause, resume, reset)
-- Real-time performance monitoring for debugging
+### 5D: Multi-Line Scaling (Stretch)
+- [ ] Second parallel assembly line
+- [ ] Shared logistics feeding both lines
+- [ ] Throughput comparison visualization
 
 ---
 
-## PHASE 4 - Polish & Enhancements (Ongoing)
+## Phase 6 - Penguin Workers 🐧 FUTURE
 
-### Visual Assembly Feedback
-- [ ] Add progress bars above houses during assembly
-- [ ] Sound effects for assembly events
+### 6A: Penguin Model
+**Goal:** Realistic (not cartoonish) penguin characters
 
-### Smooth Assembly Animations (from Phase 2)
-- [ ] Add components with initial scale/position offsets
-- [ ] Animate walls sliding in from sides (scale Y from 0 to 1)
-- [ ] Animate roof dropping from above (position Y from +10 to 0)
-- [ ] Use lerp or ThreeJS Tween for smooth animation
-- [ ] Add small delay between components (0.5s)
+- [ ] Research emperor penguin proportions
+- [ ] Body: elongated oval/capsule
+- [ ] Head: smaller oval with beak
+- [ ] Flippers: flat paddle shapes
+- [ ] Feet: orange webbed feet
+- [ ] Eyes: small black with white ring
+- [ ] Materials: black back, white front, orange accents
 
-### Station Pause Behavior
-- [ ] House pauses at each station during assembly
-- [ ] Visual indicator when paused (pulsing glow?)
-- [ ] Configurable dwell time per station
+### 6B: Penguin Rig & Poses
+- [ ] Standing pose (default)
+- [ ] Walking pose (for animation)
+- [ ] Operating pose (flippers on controls)
+- [ ] Pointing/directing pose
+- [ ] Simple skeleton for pose interpolation
 
-### Advanced Camera Controls
-- [ ] Smooth camera transitions between presets
-- [ ] Follow camera mode (tracks a specific house)
-- [ ] Cinematic camera paths
-- [ ] First-person walkthrough mode
+### 6C: Penguin Roles & Placement
+- [ ] Station operators (1 per station, watching assembly)
+- [ ] Forklift/AGV drivers
+- [ ] Quality inspector (end of line)
+- [ ] Supervisor with clipboard
+- [ ] Walking penguins (background activity)
 
-### Performance Optimizations (If Needed)
-- [ ] Geometry instancing for repeated elements
-- [ ] LOD (Level of Detail) system
-- [ ] Shadow map optimization
-- [ ] Object pooling for houses
+### 6D: Penguin Animation
+- [ ] Idle: subtle weight shift, head turn
+- [ ] Walk cycle: waddle animation
+- [ ] Operating: flipper movements
+- [ ] Reactive: turn to watch house pass
 
 ---
 
-## PHASE 5 - Future Ideas (Backlog)
+## Phase 7 - Polish & Advanced (Backlog)
 
-### Factory Realism
-- [ ] Robotic arm animations at stations
-- [ ] Worker NPCs (simple animated figures)
-- [ ] Forklift/material handling vehicles
-- [ ] Warehouse/storage area
+### Visual Polish
+- [ ] Better materials (metallic, matte finishes)
+- [ ] Environment lighting improvements
+- [ ] Ambient occlusion (baked or SSAO)
+- [ ] Anti-aliasing tuning
 
-### Multiple House Types
-- [ ] Different house sizes (small, medium, large)
-- [ ] Color/material variations
-- [ ] Custom house designer UI
+### Camera Enhancements
+- [ ] Preset camera positions (overview, station closeups)
+- [ ] Smooth camera transitions
+- [ ] Follow camera mode (tracks a house)
+- [ ] Cinematic auto-tour mode
+
+### Audio (Optional)
+- [ ] Ambient factory hum
+- [ ] Assembly sounds (clicks, whirs)
+- [ ] Conveyor movement sound
 
 ### Data & Analytics
-- [ ] Historical throughput charts
-- [ ] Export production data (CSV/JSON)
-- [ ] Simulation scenarios (what-if analysis)
+- [ ] Historical throughput chart
+- [ ] Export production data
+- [ ] Simulation scenarios
 
 ### Deployment
-- [ ] Deploy to GitHub Pages or Vercel
-- [ ] Add README with live demo link
-- [ ] Create shareable screenshots/GIFs
+- [ ] Optimize for production
+- [ ] Deploy to GitHub Pages
+- [ ] Create shareable demo link
+- [ ] README with screenshots/GIFs
 
+---
+
+## Quick Reference
+
+### File Structure
+```
+src/
+├── main.js        # Scene, camera, render loop
+├── factory.js     # Floor, conveyor, stations
+├── house.js       # House model, assembly states
+├── ui.js          # dat.GUI, stats
+├── animation.js   # Easing, AnimatedComponent (NEW)
+├── machinery.js   # RoboticArm, Crane, Clamps (NEW)
+├── logistics.js   # Storage, AGVs, transport (FUTURE)
+└── penguin.js     # Penguin model, animation (FUTURE)
+```
+
+### Current Priority
+1. **4A: Station Pause** - Make houses stop at stations
+2. **4B: Component Animations** - Parts animate into place
+3. **4C: Machinery** - Robotic arms and crane visuals
+
+### Commands
+```bash
+# Start dev server
+npx http-server -p 8080
+
+# Open in browser
+open http://localhost:8080
+```

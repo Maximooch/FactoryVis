@@ -1,7 +1,7 @@
 # FactoryVis - Side Project Plan
 
 ## Project Vision
-Interactive 3D visualization of a modular house manufacturing factory using ThreeJS. **Goal:** Demonstrate the conceptual speed and scale of automated house shell production while learning 3D graphics programming.
+Interactive 3D visualization of a modular house manufacturing factory using ThreeJS, inspired by Tesla Gigafactory aesthetics. **Goal:** Demonstrate the conceptual speed and scale of automated house shell production with realistic physics-based animations and mechanical assembly processes.
 
 ## Project Status
 
@@ -13,11 +13,22 @@ Interactive 3D visualization of a modular house manufacturing factory using Thre
 - Production controls (pause, resume, reset, speed)
 - WASD camera controls + OrbitControls
 
-**🔄 Ongoing Enhancements** (Side Project)
-- Smooth assembly animations
-- Visual polish and effects
-- Advanced camera modes
-- Performance optimizations
+**🔄 Current Focus:** Realistic assembly animations & logistics
+**🐧 Future:** Penguin workers (realistic style)
+
+## Design Direction
+
+**Style:** Tesla Gigafactory-inspired
+- Clean, minimalist industrial aesthetic
+- White/gray floors with colored zone markings
+- Mechanical precision in animations
+- Visible logistics flow (parts → staging → assembly)
+
+**Animation Philosophy:**
+- Physics-based, realistic movement
+- Mechanical assembly (robotic arms, lifts, clamps)
+- Parts arrive from logistics, not "magic appearance"
+- Satisfying precision and timing
 
 ## Tech Stack
 
@@ -26,167 +37,203 @@ Interactive 3D visualization of a modular house manufacturing factory using Thre
 - Vanilla JavaScript (no framework overhead)
 - dat.GUI (quick parameter controls)
 
-**Optional:**
-- GSAP (smooth animations, if ThreeJS tweening insufficient)
-
 **Structure:**
 ```
 FactoryVis/
-├── index.html          # Single page app
+├── index.html
 ├── src/
-│   ├── main.js         # ThreeJS scene setup
-│   ├── factory.js      # Factory logic (conveyor, stations)
-│   ├── house.js        # House model & assembly
+│   ├── main.js         # Scene setup, render loop
+│   ├── factory.js      # Factory floor, conveyors, zones
+│   ├── house.js        # House model & assembly states
+│   ├── logistics.js    # Parts storage, staging, transport (NEW)
+│   ├── machinery.js    # Robotic arms, lifts, clamps (NEW)
+│   ├── penguin.js      # Penguin workers (FUTURE)
 │   └── ui.js           # Controls/stats overlay
 ├── assets/
-│   └── textures/       # Simple textures (optional)
-├── PLAN.md            # This file
 └── README.md
 ```
 
 ## Development Phases
 
 ### Phase 1 - Foundation ✅ COMPLETE
-**Goal:** See something moving in 3D (Week 1, Day 1)
+- [x] Basic ThreeJS scene with lighting
+- [x] Factory floor and conveyor belt
+- [x] Simple house model with assembly stages
+- [x] Camera controls (Orbit + WASD)
 
-- [x] Setup: HTML boilerplate, ThreeJS import
-- [x] Scene basics: Camera, lights, floor grid
-- [x] Simple factory floor (plane with texture/color)
-- [x] ONE basic house shell (BoxGeometry for now)
-- [x] OrbitControls for camera + WASD controls
-- [x] Conveyor belt with station markers
+### Phase 2 - Assembly System ✅ COMPLETE
+- [x] 3 Assembly stations with visual markers
+- [x] House moves station-to-station
+- [x] Components appear at each stage
+- [x] Shadows and basic lighting
 
-### Phase 2 - Assembly Magic ✅ COMPLETE
-**Goal:** Show the manufacturing process (Week 1, Day 1-2)
+### Phase 3 - UI & Controls ✅ COMPLETE
+- [x] dat.GUI integration
+- [x] Performance monitoring (FPS)
+- [x] Production controls (pause/resume/reset)
+- [x] Speed controls
 
-- [x] 3 Assembly stations (visual markers on floor)
-- [x] House assembly sequence (frame → walls → roof)
-- [x] Animation: House moves station-to-station
-- [x] Lighting/shadows for depth
-- [ ] Smooth assembly animations (stretch goal)
+### Phase 4 - Realistic Assembly Animations 🔄 CURRENT
+**Goal:** Physics-based, mechanical assembly process
 
-### Phase 3 - UI & Polish ✅ COMPLETE
-**Goal:** Production controls and monitoring (Week 1, Day 2-3)
+#### 4A: Station Pause & Timing
+- [ ] House pauses at each station
+- [ ] Configurable dwell time per station
+- [ ] Visual "processing" indicator
+- [ ] Smooth acceleration/deceleration
 
-- [x] Performance monitoring (FPS, frame time)
-- [x] Production controls (pause, resume, reset)
-- [x] Speed controls via dat.GUI
-- [ ] Visual feedback enhancements (stretch goal)
+#### 4B: Component Animations
+- [ ] Frame: Rises from floor or slides in from side
+- [ ] Walls: Slide in from perpendicular conveyor/staging
+- [ ] Roof: Lowers from overhead gantry/crane
+- [ ] Easing functions for realistic motion
 
-### Phase 4 - Enhancements (Ongoing)
-**Goal:** Polish and experimental features
+#### 4C: Assembly Machinery
+- [ ] Robotic arm models (articulated cylinders)
+- [ ] Arm reaches, grabs, places components
+- [ ] Overhead crane/gantry for roof
+- [ ] Clamps/fixtures that engage during assembly
 
-- [ ] Smooth assembly animations (lerp/tween)
-- [ ] Station pause behavior
-- [ ] Advanced camera modes (follow, cinematic)
-- [ ] Multiple houses in pipeline
-- [ ] Performance optimizations
+### Phase 5 - Logistics System
+**Goal:** Show where parts come from (Gigafactory-style flow)
 
-### Phase 5 - Future Ideas (Backlog)
-- Robotic arm animations
-- Multiple house types
-- Data export and analytics
-- Deployment to web
+#### 5A: Factory Layout Expansion
+- [ ] Parts storage zone (side area)
+- [ ] Staging area near assembly line
+- [ ] Floor markings and zone colors
+- [ ] Expanded camera bounds
 
-## Ruthless Scope (What to SKIP)
+#### 5B: Parts Transport
+- [ ] Wall panels stored in racks
+- [ ] Roof sections in overhead staging
+- [ ] Automated guided vehicles (AGVs) or conveyors
+- [ ] Parts queue visualization
 
-### ❌ Don't Build (Low Priority):
-- High-fidelity CAD models (use primitives)
-- Accurate factory dimensions (schematic OK)
-- Physics simulation (linear movement only)
-- Backend/database (100% client-side)
-- Mobile responsiveness (desktop-first)
-- Multiple building types (one design only)
-- Interior details (shells only, as specified)
-- Material variety (one style sufficient)
+#### 5C: Multi-Line Scaling
+- [ ] Parallel assembly lines
+- [ ] Shared logistics feeding multiple lines
+- [ ] Throughput visualization
 
-### ✅ Keep It Simple:
-- House = 4 boxes (frame, 2 walls, roof)
-- Conveyor = sliding platform
-- Stations = labeled zones on floor
-- Animation = linear interpolation
-- UI = dat.GUI sliders
+### Phase 6 - Penguin Workers 🐧 FUTURE
+**Goal:** Realistic penguin characters operating the factory
+
+#### 6A: Penguin Model
+- [ ] Anatomically-inspired model (not cartoonish)
+- [ ] Body, head, beak, flippers, feet
+- [ ] Multiple poses (standing, walking, operating)
+- [ ] Simple rig for animation
+
+#### 6B: Penguin Roles
+- [ ] Station operators (monitoring assembly)
+- [ ] Forklift/AGV drivers
+- [ ] Quality inspectors
+- [ ] Supervisors with clipboards
+
+#### 6C: Penguin Animation
+- [ ] Idle animations (head turn, shift weight)
+- [ ] Walk cycle
+- [ ] Operating machinery gestures
+- [ ] Reactive behaviors (watch house pass by)
+
+### Phase 7 - Polish & Advanced Features (Backlog)
+- [ ] Multiple house types/sizes
+- [ ] Day/night lighting cycles
+- [ ] Sound effects
+- [ ] Data export and analytics
+- [ ] VR/AR exploration
+- [ ] Deploy to web (GitHub Pages)
 
 ## Technical Approach
 
-### House Model (Simplified)
+### Animation System (Phase 4)
 ```javascript
-// Conceptual - not final code
-class HouseShell {
-  constructor() {
-    this.frame = new BoxGeometry(10, 8, 12);    // Outline
-    this.walls = new BoxGeometry(10, 8, 12);    // Solid
-    this.roof = new BoxGeometry(12, 2, 14);     // Top cap
+// Lerp helper with easing
+function easeInOutQuad(t) {
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+// Component animation state
+class AnimatedComponent {
+  constructor(mesh, startPos, endPos, duration) {
+    this.mesh = mesh;
+    this.startPos = startPos;
+    this.endPos = endPos;
+    this.duration = duration;
+    this.elapsed = 0;
   }
   
-  assembleAt(station) {
-    // Add component based on station
+  update(deltaTime) {
+    this.elapsed += deltaTime;
+    const t = Math.min(this.elapsed / this.duration, 1);
+    const eased = easeInOutQuad(t);
+    this.mesh.position.lerpVectors(this.startPos, this.endPos, eased);
+    return t >= 1; // returns true when complete
   }
 }
 ```
 
-### Factory Flow
-1. Spawn empty platform at Station 0
-2. Move to Station 1 → add frame
-3. Move to Station 2 → add walls  
-4. Move to Station 3 → add roof
-5. Exit factory → despawn, increment counter
+### Robotic Arm (Phase 4C)
+```javascript
+class RoboticArm {
+  constructor() {
+    this.base = new CylinderGeometry(...);
+    this.shoulder = new CylinderGeometry(...);
+    this.elbow = new CylinderGeometry(...);
+    this.wrist = new CylinderGeometry(...);
+    // Hierarchical parenting for articulation
+  }
+  
+  animateTo(targetAngles, duration) {
+    // Interpolate joint angles
+  }
+}
+```
 
-### Animation System
-- Use ThreeJS `requestAnimationFrame` loop
-- Track position along conveyor (0.0 to 1.0)
-- Lerp between station positions
-- Trigger assembly when position reaches station threshold
+### Factory Flow (Updated)
+1. Parts arrive at storage zone
+2. AGV/conveyor moves parts to staging
+3. Empty platform enters assembly line
+4. Station 1: Arm places frame → platform pauses → assembly animates
+5. Station 2: Walls slide in from staging → clamps engage → attach
+6. Station 3: Overhead crane lowers roof → secures
+7. Completed house exits → counter increments
 
 ## Key Learning Goals
 
 **Already learned:**
-- ThreeJS scene graph (objects, camera, lights)
-- Animation loop patterns
-- Basic 3D geometry manipulation
-- UI overlay with 3D canvas
-- Performance considerations (object pooling if needed)
+- ThreeJS scene graph
+- Animation loops
+- Basic geometry
+- UI overlays
 
-**Next to learn:**
-- Animation systems (lerp, tween, keyframes)
-- More complex geometry and materials
-- Camera animation and transitions
+**Currently learning:**
+- Easing and interpolation
+- Articulated/hierarchical models
+- Complex animation sequencing
 
-## Next Steps (When You Have Time)
-
-**High Impact, Low Effort:**
-- Smooth assembly animations (most visual bang for buck)
-- Station pause behavior (adds drama)
-
-**Medium Effort:**
-- Multiple houses in pipeline
-- Camera presets and transitions
-
-**Future Exploration:**
-- Real factory layout (based on research)
-- More detailed house models (glTF imports)
-- Multiple building designs
-- VR/AR exploration
-- Deploy to web (GitHub Pages, Vercel)
+**Future learning:**
+- Character modeling and rigging
+- Walk cycles and procedural animation
+- Factory simulation patterns
 
 ## Resources
 
-**ThreeJS Docs:**
-- https://threejs.org/docs/
-- https://threejs.org/examples/
-
 **Inspiration:**
-- Boxabl factory videos (modular housing)
-- Assembly line simulations
-- Factory digital twins
+- Tesla Gigafactory tours (YouTube)
+- Boxabl factory videos
+- Industrial automation demos
+- Factorio/Satisfactory (game aesthetics)
+
+**Technical:**
+- ThreeJS docs: https://threejs.org/docs/
+- Easing functions: https://easings.net/
 
 ---
 
 **Project Philosophy:**
-- This is a **learning project** and **side project** - no deadlines, no pressure
-- Work on it when you have time and energy
-- Focus on features that interest you
-- The MVP is done - everything else is bonus
-- Have fun with it!
+- Learning project, no deadlines
+- Build what's interesting
+- MVP is done - everything else is bonus
+- Have fun with it! 🐧
 
-**Current Priority:** Smooth assembly animations would be the most visually impactful next enhancement.
+**Current Priority:** Phase 4A (station pause behavior) → 4B (component animations)
