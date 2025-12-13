@@ -1,6 +1,12 @@
-# FactoryVis - Weekend TODO List
+# FactoryVis - Side Project TODO List
 
-**Purpose:** Granular task breakdown with checkboxes. Check items off as you complete them.
+**Purpose:** Granular task breakdown with checkboxes. Originally a weekend project, now a long-term side project for continued learning and polish.
+
+**Timeline:** 
+- Week 1 (Complete): Core foundation, assembly system, basic UI
+- Ongoing: Enhancements, polish, and experimental features as time permits
+
+**Approach:** Work on this when you have spare time. No pressure, no deadlines. Focus on learning and having fun with ThreeJS.
 
 ---
 
@@ -114,8 +120,8 @@
 
 ---
 
-## DAY 2 - Assembly Magic (Sunday Morning/Afternoon)
-**Goal:** Progressive assembly animation at each station
+## PHASE 2 - Assembly Magic ✅ CORE COMPLETE
+**Goal:** Progressive assembly animation at each station (core done, animations are stretch goals)
 
 **STATUS:** Day 1 completed all core functionality! Assembly already working.
 The following tasks can be enhanced with smoother animations.
@@ -204,9 +210,9 @@ The following tasks can be enhanced with smoother animations.
 
 ---
 
-## DAY 3 - UI & Polish (Sunday Afternoon) ✅ STARTED!
+## PHASE 3 - UI & Polish ✅ CORE COMPLETE
 
-### Afternoon Session (Completed Tasks)
+### Completed Tasks
 
 #### Task 3.1: Performance Monitoring System ✅ COMPLETE
 **Files:** `src/ui.js`, `src/main.js`
@@ -237,21 +243,60 @@ The following tasks can be enhanced with smoother animations.
 - Full control over production flow (pause, resume, reset)
 - Real-time performance monitoring for debugging
 
-### Next Steps (Optional Enhancements)
+---
 
-#### Task 3.3: Visual Assembly Feedback (Optional)
+## PHASE 4 - Polish & Enhancements (Ongoing)
+
+### Visual Assembly Feedback
 - [ ] Add progress bars above houses during assembly
-- [ ] Smooth component fade-in/scale animations
-- [ ] "ASSEMBLING" text labels at active stations
 - [ ] Sound effects for assembly events
 
-#### Task 3.4: Advanced Camera Controls (Optional)
+### Smooth Assembly Animations (from Phase 2)
+- [ ] Add components with initial scale/position offsets
+- [ ] Animate walls sliding in from sides (scale Y from 0 to 1)
+- [ ] Animate roof dropping from above (position Y from +10 to 0)
+- [ ] Use lerp or ThreeJS Tween for smooth animation
+- [ ] Add small delay between components (0.5s)
+
+### Station Pause Behavior
+- [ ] House pauses at each station during assembly
+- [ ] Visual indicator when paused (pulsing glow?)
+- [ ] Configurable dwell time per station
+
+### Advanced Camera Controls
 - [ ] Smooth camera transitions between presets
 - [ ] Follow camera mode (tracks a specific house)
 - [ ] Cinematic camera paths
+- [ ] First-person walkthrough mode
 
-#### Task 3.5: Performance Optimizations (If Needed)
+### Performance Optimizations (If Needed)
 - [ ] Geometry instancing for repeated elements
 - [ ] LOD (Level of Detail) system
 - [ ] Shadow map optimization
+- [ ] Object pooling for houses
+
+---
+
+## PHASE 5 - Future Ideas (Backlog)
+
+### Factory Realism
+- [ ] Robotic arm animations at stations
+- [ ] Worker NPCs (simple animated figures)
+- [ ] Forklift/material handling vehicles
+- [ ] Warehouse/storage area
+
+### Multiple House Types
+- [ ] Different house sizes (small, medium, large)
+- [ ] Color/material variations
+- [ ] Custom house designer UI
+
+### Data & Analytics
+- [ ] Historical throughput charts
+- [ ] Export production data (CSV/JSON)
+- [ ] Simulation scenarios (what-if analysis)
+
+### Deployment
+- [ ] Deploy to GitHub Pages or Vercel
+- [ ] Add README with live demo link
+- [ ] Create shareable screenshots/GIFs
 
